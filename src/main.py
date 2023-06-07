@@ -8,6 +8,8 @@
 
 import pygame as pg
 
+from game import World
+
 
 WIN_SIZE = (512, 512)
 GRID_SIZE = (32, 32)
@@ -39,13 +41,6 @@ def draw_grid(screen):
         )
 
 
-def alive_cells(world):
-    for x in range(GRID_SIZE[0]):
-        for y in range(GRID_SIZE[1]):
-            if world[x][y]:
-                yield x, y
-
-
 def draw_cell(screen, pos, color):
     pg.draw.rect(
         screen,
@@ -62,30 +57,6 @@ def draw_cell(screen, pos, color):
 def draw_cells(screen, world):
     for pos in alive_cells(world):
         draw_cell(screen, pos, CELL_COLOR)
-
-
-def neighbors(pos):
-    for dx in range(-1, 2):
-        for dy in range(-1, 2):
-            if dx or dy:
-                yield (pos[0] + dx) % GRID_SIZE[0], \
-                      (pos[1] + dy) % GRID_SIZE[1]
-
-
-def get_neighbor_counts(world):
-    result = [[0 for y in range(GRID_SIZE[1])] for x in range(GRID_SIZE[0])]
-    for pos in alive_cells(world):
-        for neighbor_pos in neighbors(pos):
-            result[neighbor_pos[0]][neighbor_pos[1]] += 1
-
-    return result
-
-
-def step(world, rule):
-    neighbor_counts = get_neighbor_counts(world)
-    for x in range(GRID_SIZE[0]):
-        for y in range(GRID_SIZE[1]):
-            world[x][y] = int(neighbor_counts[x][y] in rule[1 - world[x][y]])
 
 
 def screen_coords_to_world(pos):
@@ -114,8 +85,7 @@ def main():
         [3],
     ]
 
-    world = [[0 for y in range(GRID_SIZE[1])]
-              for x in range(GRID_SIZE[0])]
+    world = World(GRID_SIZE)
     
     screen = pg.display.set_mode((512, 512))
     pg.time.set_timer(pg.USEREVENT + 1, STEP_TIME)
@@ -139,18 +109,18 @@ def main():
                     update_title(paused, rule)
 
             elif event.type == pg.USEREVENT + 1 and not paused:
-                step(world, rule)
+                world.step(rule)
 
         hovered_pos = screen_coords_to_world(pg.mouse.get_pos())
         if pg.mouse.get_pressed()[0]:
-            world[hovered_pos[0]][hovered_pos[1]] = 1
+            world.grid[hovered_pos[0]][hovered_pos[1]] = 1
         elif pg.mouse.get_pressed()[2]:
-            world[hovered_pos[0]][hovered_pos[1]] = 0
+            world.grid[hovered_pos[0]][hovered_pos[1]] = 0
 
         screen.fill(BACKGROUND_COLOR)
         draw_cell(screen, hovered_pos, HOVERED_CELL_COLOR)
         draw_grid(screen)
-        draw_cells(screen, world)
+        draw_cells(screen, world.grid)
 
         pg.display.flip()
 
