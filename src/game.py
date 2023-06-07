@@ -1,3 +1,6 @@
+import pygame as pg
+
+
 class World:
     # Tworzy pusty świat o rozmiarze size[0] x size[1].
     def __init__(self, size):
@@ -41,3 +44,55 @@ class World:
                 if dx or dy:
                     yield (pos[0] + dx) % self.size[0], \
                           (pos[1] + dy) % self.size[1]
+
+
+class WorldGraphics:
+    GRID_COLOR = (120, 120, 120)
+    CELL_COLOR = (80, 80, 80)
+
+    def __init__(self, world, cell_size):
+        self.cell_size = cell_size
+        self.world = world
+
+    # Rysuje cały świat i siatkę
+    def draw(self, screen):
+        self.draw_grid(screen)
+        self.draw_cells(screen)
+
+    # Rysuje siatkę
+    def draw_grid(self, screen):
+        screen_size = screen.get_size()
+
+        for x in range(self.world.size[0]):
+            pg.draw.line(
+                screen,
+                WorldGraphics.GRID_COLOR,
+                (x * self.cell_size[0], 0),
+                (x * self.cell_size[0], screen_size[1])
+            )
+
+        for y in range(self.world.size[0]):
+            pg.draw.line(
+                screen,
+                WorldGraphics.GRID_COLOR,
+                (0, y * self.cell_size[1]),
+                (screen_size[0], y * self.cell_size[1])
+            )
+
+    # Rysuje wszystkie żywe komórki
+    def draw_cells(self, screen):
+        for pos in self.world.alive_cells():
+            self.draw_cell(screen, pos, WorldGraphics.CELL_COLOR)
+
+    # Rysuje jedną komórkę
+    def draw_cell(self, screen, pos, color):
+        pg.draw.rect(
+            screen,
+            color,
+            pg.Rect(
+                pos[0] * self.cell_size[0],
+                pos[1] * self.cell_size[1],
+                self.cell_size[0],
+                self.cell_size[1],
+            )
+        )
