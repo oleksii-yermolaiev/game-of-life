@@ -9,6 +9,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
 \usepackage{listings}
+\usepackage{graphicx}
 \usepackage{color}
 
 \title{Gra w życie}
@@ -46,7 +47,14 @@
 \maketitle
 
 \section{Opis projektu}
+
 Prosta symulacja gry w życie z możliwością zmiany reguł.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=200pt]{screenshots/glider.png}
+\caption{Klasyczny ``Glider''.}
+\end{figure}
 
 \subsection{Sterowanie}
 \begin{itemize}
@@ -67,6 +75,7 @@ Prosta symulacja gry w życie z możliwością zmiany reguł.
 \end{itemize}
 
 \subsection{Reguły}
+
 Przy każdym kroku gry dla każdej komórki:
 \begin{itemize}
   \item Jeżeli jest żywa, regułę określa wierzchni rząd przełączników;
@@ -77,6 +86,12 @@ Nowy stan komórki określa $n$ty przęłącznik rzędu, gdzie $n$ - liczba jej 
   \item Jeżeli jest włączony, komórka żyje;
   \item Jeżeli jest wyłączony, komórka nie żyje.
 \end{itemize}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=200pt]{screenshots/rules.png}
+\caption{Menu zmiany reguł.}
+\end{figure}
 
 \section{Opis procesu projektowania}
 Zacząłem od kodu jednego z zadań domowych z PSM. Rozdzieliłem kod na kilka plików,
