@@ -58,7 +58,7 @@ def main():
                     update_title(paused, menu.rule)
 
                 elif event.key == pg.K_RETURN and paused:
-                    world.step(world, menu.rule)
+                    world.step(menu.rule)
 
                 elif event.key == pg.K_ESCAPE:
                     rule = menu.get_rule()
