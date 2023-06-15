@@ -30,23 +30,24 @@ def screen_coords_to_world(pos):
 
 def update_title(paused, rule):
     paused_str = "Paused" if paused else "Running"
-    rule_str = ''.join(map(str, rule[0])) + '/' + ''.join(map(str, rule[1]))
-    pg.display.set_caption(f"Game of Life | {paused_str} | Rule: {rule_str}")
+    pg.display.set_caption(f"Game of Life | {paused_str}")
 
 
 def parse_rule(string):
     split = string.split('/')
-    return list(map(
-        lambda chars: list(map(int, chars)),
-        split
-    ))
+    return [
+        [
+            chr(neighbor_count) in split[state]
+            for neighbor_count in range(9)
+        ] for state in range(2)
+    ]
 
 
 def main():
     paused = True
     rule = [
-        [2, 3],
-        [3],
+        [False, False, True, True, False, False, False, False, False],
+        [False, False, False, True, False, False, False, False, False],
     ]
 
     world = World(GRID_SIZE)
@@ -67,10 +68,10 @@ def main():
                     update_title(paused, rule)
 
                 elif event.key == pg.K_RETURN and paused:
-                    step(world, rule)
+                    world.step(world, rule)
 
                 elif event.key == pg.K_ESCAPE:
-                    rule = parse_rule(input("Enter new rule: "))
+                    rule = menu.get_rule()
                     update_title(paused, rule)
 
             elif event.type == pg.USEREVENT + 1 and not paused:

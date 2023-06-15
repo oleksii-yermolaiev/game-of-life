@@ -10,15 +10,15 @@ class World:
 
     def step(self, rule):
         """Wykonuje 1 krok symulacji.
-        rule[0] - lista liczb sąsiadów, dla których żywa komórka zostaje żywą;
-        rule[1] - litsa liczb sąsiadów, dla któych martwa komórka zostaje żywą;
+        rule[0][liczba sąsiadów] - nowy stan komórki, jeżeli żyje;
+        rule[1][liczba sąsiadów] - nowy stan komórki, jeżeli nie żyje;
         Inaczej komórka zostaje martwą.
         """
         neighbor_counts = self.get_neighbor_counts()
         for x in range(self.size[0]):
             for y in range(self.size[1]):
                 cell_state = self.grid[x][y]
-                becomes_alive = neighbor_counts[x][y] in rule[1 - cell_state]
+                becomes_alive = rule[1 - cell_state][neighbor_counts[x][y]]
                 self.grid[x][y] = int(becomes_alive)
 
     def get_neighbor_counts(self):
