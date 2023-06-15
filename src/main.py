@@ -11,7 +11,7 @@ enter  - (kiedy zatrzymano) zrób jeden krok
 import pygame as pg
 
 from game import World, WorldGraphics
-
+from menu import Menu
 
 WIN_SIZE = (512, 512)
 GRID_SIZE = (32, 32)
@@ -45,37 +45,37 @@ def parse_rule(string):
 
 def main():
     paused = True
-    rule = [
-        [False, False, True, True, False, False, False, False, False],
-        [False, False, False, True, False, False, False, False, False],
-    ]
+    menu = Menu(WIN_SIZE)
 
     world = World(GRID_SIZE)
     graphics = WorldGraphics(world, CELL_SIZE)
     
     screen = pg.display.set_mode((512, 512))
     pg.time.set_timer(pg.USEREVENT + 1, STEP_TIME)
-    update_title(paused, rule)
+    update_title(paused, menu.rule)
 
     while True:
         for event in pg.event.get():
-            if event.type == pg.QUIT:
+            if menu.on_event(event):
+                continue
+
+            elif event.type == pg.QUIT:
                 return
 
             elif event.type == pg.KEYDOWN:
                 if event.key == pg.K_SPACE:
                     paused = not paused
-                    update_title(paused, rule)
+                    update_title(paused, menu.rule)
 
                 elif event.key == pg.K_RETURN and paused:
-                    world.step(world, rule)
+                    world.step(world, menu.rule)
 
                 elif event.key == pg.K_ESCAPE:
                     rule = menu.get_rule()
-                    update_title(paused, rule)
+                    update_title(paused, menu.rule)
 
             elif event.type == pg.USEREVENT + 1 and not paused:
-                world.step(rule)
+                world.step(menu.rule)
 
         hovered_pos = screen_coords_to_world(pg.mouse.get_pos())
         if pg.mouse.get_pressed()[0]:
@@ -86,6 +86,8 @@ def main():
         screen.fill(BACKGROUND_COLOR)
         graphics.draw_cell(screen, hovered_pos, HOVERED_CELL_COLOR)
         graphics.draw(screen)
+
+        menu.draw(screen)
 
         pg.display.flip()
 
