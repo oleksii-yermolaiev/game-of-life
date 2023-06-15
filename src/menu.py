@@ -13,8 +13,10 @@ class Menu:
     CHECKBOX_SPACING = 10
 
     CHECKBOX_OFFSET = CHECKBOX_SIZE + CHECKBOX_SPACING
-    CHECKBOXES_WIDTH = CHECKBOX_COL_NUMBER * CHECKBOX_SIZE + (CHECKBOX_COL_NUMBER - 1) * CHECKBOX_SPACING
-    CHECKBOXES_HEIGHT = CHECKBOX_ROW_NUMBER * CHECKBOX_SIZE + (CHECKBOX_ROW_NUMBER - 1) * CHECKBOX_SPACING
+    CHECKBOXES_WIDTH = CHECKBOX_COL_NUMBER * CHECKBOX_SIZE \
+                     + (CHECKBOX_COL_NUMBER - 1) * CHECKBOX_SPACING
+    CHECKBOXES_HEIGHT = CHECKBOX_ROW_NUMBER * CHECKBOX_SIZE \
+                      + (CHECKBOX_ROW_NUMBER - 1) * CHECKBOX_SPACING
 
     def __init__(self, win_size):
         """Tworzy nowe menu. Standardowa reguła - reguła Conwaya."""
@@ -47,13 +49,12 @@ class Menu:
 
     def update_rule(self):
         """Updatuje self.rule opeirając się na stanie przełączników."""
-        self.rule = [
-            [
-                self.rule_checkboxes[state * Menu.CHECKBOX_COL_NUMBER + neighbor_count].active
-                for neighbor_count in range(Menu.CHECKBOX_COL_NUMBER)
-            ]
-            for state in range(Menu.CHECKBOX_ROW_NUMBER)
-        ]
+        self.rule = [[
+            self.rule_checkboxes[
+                state * Menu.CHECKBOX_COL_NUMBER + neighbor_counts
+            ].active
+            for neighbor_counts in range(Menu.CHECKBOX_COL_NUMBER)
+        ] for state in range(Menu.CHECKBOX_ROW_NUMBER)]
 
     def on_event(self, event):
         """Odpowiada na wydarzenia.

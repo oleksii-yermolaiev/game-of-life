@@ -23,7 +23,10 @@ class World:
 
     def get_neighbor_counts(self):
         """Zwraca siatkę z liczbą żywych sąsiadów dla każdej komórki."""
-        result = [[0 for y in range(self.size[1])] for x in range(self.size[0])]
+        result = [
+            [0 for y in range(self.size[1])]
+            for x in range(self.size[0])
+        ]
         for pos in self.alive_cells():
             for neighbor_pos in self.neighbors(pos):
                 result[neighbor_pos[0]][neighbor_pos[1]] += 1
