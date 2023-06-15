@@ -33,16 +33,6 @@ def update_title(paused, rule):
     pg.display.set_caption(f"Game of Life | {paused_str}")
 
 
-def parse_rule(string):
-    split = string.split('/')
-    return [
-        [
-            chr(neighbor_count) in split[state]
-            for neighbor_count in range(9)
-        ] for state in range(2)
-    ]
-
-
 def main():
     paused = True
     menu = Menu(WIN_SIZE)
