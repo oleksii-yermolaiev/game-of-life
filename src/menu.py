@@ -4,6 +4,9 @@ from gui import Checkbox
 
 
 class Menu:
+    PANEL_COLOR = (100, 100, 100)
+    PANEL_PADDING = 10
+
     CHECKBOX_COL_NUMBER = 9
     CHECKBOX_ROW_NUMBER = 2
     CHECKBOX_SIZE = 30
@@ -33,6 +36,13 @@ class Menu:
         self.rule_checkboxes[3].active = True
         self.rule_checkboxes[Menu.CHECKBOX_COL_NUMBER + 3].active = True
 
+        self.panel_rect = pg.Rect(
+            start_x - Menu.PANEL_PADDING,
+            start_y - Menu.PANEL_PADDING,
+            Menu.CHECKBOXES_WIDTH + Menu.PANEL_PADDING * 2,
+            Menu.CHECKBOXES_HEIGHT + Menu.PANEL_PADDING * 2
+        )
+
         self.update_rule()
 
     def update_rule(self):
@@ -58,5 +68,6 @@ class Menu:
     
     def draw(self, screen):
         """Rysuje menu."""
+        pg.draw.rect(screen, Menu.PANEL_COLOR, self.panel_rect)
         for checkbox in self.rule_checkboxes:
             checkbox.draw(screen)
