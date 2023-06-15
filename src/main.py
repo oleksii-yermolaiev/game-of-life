@@ -1,9 +1,11 @@
-# Sterowanie:
-# LPM    - ustaw żywą komórkę
-# PPM    - ustaw martwą komórkę
-# escape - zmień reguły
-# spacja - zatrzymaj, kontynuuj
-# enter  - (kiedy zatrzymano) zrób jeden krok
+"""
+Sterowanie:
+LPM    - ustaw żywą komórkę
+PPM    - ustaw martwą komórkę
+escape - zmień reguły
+spacja - zatrzymaj, kontynuuj
+enter  - (kiedy zatrzymano) zrób jeden krok
+"""
 
 
 import pygame as pg

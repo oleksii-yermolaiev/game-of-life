@@ -2,17 +2,18 @@ import pygame as pg
 
 
 class World:
-    # Tworzy pusty świat o rozmiarze size[0] x size[1].
     def __init__(self, size):
+        """Tworzy pusty świat o rozmiarze size[0] x size[1]."""
         self.size = size
         self.grid = [[0 for y in range(size[1])]
                      for x in range(size[0])]
 
-    # Wykonuje 1 krok symulacji.
-    # rule[0] - lista liczb sąsiadów, dla których żywa komórka zostaje żywą;
-    # rule[1] - litsa liczb sąsiadów, dla któych martwa komórka zostaje żywą;
-    # Inaczej komórka zostaje martwą.
     def step(self, rule):
+        """Wykonuje 1 krok symulacji.
+        rule[0] - lista liczb sąsiadów, dla których żywa komórka zostaje żywą;
+        rule[1] - litsa liczb sąsiadów, dla któych martwa komórka zostaje żywą;
+        Inaczej komórka zostaje martwą.
+        """
         neighbor_counts = self.get_neighbor_counts()
         for x in range(self.size[0]):
             for y in range(self.size[1]):
@@ -20,8 +21,8 @@ class World:
                 becomes_alive = neighbor_counts[x][y] in rule[1 - cell_state]
                 self.grid[x][y] = int(becomes_alive)
 
-    # Zwraca siatkę z liczbą żywych sąsiadów dla każdej komórki.
     def get_neighbor_counts(self):
+        """Zwraca siatkę z liczbą żywych sąsiadów dla każdej komórki."""
         result = [[0 for y in range(self.size[1])] for x in range(self.size[0])]
         for pos in self.alive_cells():
             for neighbor_pos in self.neighbors(pos):
@@ -29,16 +30,15 @@ class World:
 
         return result
 
-    # Generator zwracający współrzędne każdej żywej komórki.
     def alive_cells(self):
+        """Generator zwracający współrzędne każdej żywej komórki."""
         for x in range(self.size[0]):
             for y in range(self.size[1]):
                 if self.grid[x][y]:
                     yield x, y
 
-
-    # Generator zwracający współrzędne sąsiadów komórki.
     def neighbors(self, pos):
+        """Generator zwracający współrzędne sąsiadów komórki."""
         for dx in range(-1, 2):
             for dy in range(-1, 2):
                 if dx or dy:
@@ -54,13 +54,13 @@ class WorldGraphics:
         self.cell_size = cell_size
         self.world = world
 
-    # Rysuje cały świat i siatkę
     def draw(self, screen):
+        """Rysuje cały świat i siatkę."""
         self.draw_grid(screen)
         self.draw_cells(screen)
 
-    # Rysuje siatkę
     def draw_grid(self, screen):
+        """Rysuje siatkę"""
         screen_size = screen.get_size()
 
         for x in range(self.world.size[0]):
@@ -79,13 +79,13 @@ class WorldGraphics:
                 (screen_size[0], y * self.cell_size[1])
             )
 
-    # Rysuje wszystkie żywe komórki
     def draw_cells(self, screen):
+        """Rysuje wszystkie żywe komórki."""
         for pos in self.world.alive_cells():
             self.draw_cell(screen, pos, WorldGraphics.CELL_COLOR)
 
-    # Rysuje jedną komórkę
     def draw_cell(self, screen, pos, color):
+        """Rysuje jedną komórkę."""
         pg.draw.rect(
             screen,
             color,
